@@ -10,7 +10,7 @@ export default function HomePage() {
     ratio: 0
   });
 
-  const handleCodeChange = (e) => setCode(e.target.value);
+  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setCode(e.target.value);
 
   const handleObfuscate = async () => {
     if (!code.trim()) return;
