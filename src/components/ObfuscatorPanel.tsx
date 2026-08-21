@@ -2,20 +2,47 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-const OptionIcon = ({ iconPath }: { iconPath: string }) => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPath} />
-  </svg>
-);
-
-const optionsData = [
-  { key: 'stringEncryption', label: 'String Encryption', desc: 'AES-256-CBC encryption for all string literals', iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
-  { key: 'controlFlow', label: 'Control Flow', desc: 'Split code into blocks with jump table dispatcher', iconPath: 'M13 10V3L4 14h7v7l9-11h-7z' },
-  { key: 'variableRenaming', label: 'Variable Renaming', desc: 'Obfuscate local variable names to meaningless identifiers', iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' },
-  { key: 'deadCode', label: 'Dead Code Injection', desc: 'Insert harmless dead code to confuse deobfuscators', iconPath: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
-  { key: 'antiDebug', label: 'Anti-Debug', desc: 'Add runtime anti-debug and anti-tamper checks', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
-  { key: 'selfModifying', label: 'Self-Modifying', desc: 'Inject self-modifying code patterns', iconPath: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
+const optionsConfig = [
+  { key: 'stringEncryption', label: 'String Encryption', desc: 'AES-256-CBC encryption for all string literals' },
+  { key: 'controlFlow', label: 'Control Flow', desc: 'Split code into blocks with jump table dispatcher' },
+  { key: 'variableRenaming', label: 'Variable Renaming', desc: 'Obfuscate local variable names to meaningless identifiers' },
+  { key: 'deadCode', label: 'Dead Code Injection', desc: 'Insert harmless dead code to confuse deobfuscators' },
+  { key: 'antiDebug', label: 'Anti-Debug', desc: 'Add runtime anti-debug and anti-tamper checks' },
+  { key: 'selfModifying', label: 'Self-Modifying', desc: 'Inject self-modifying code patterns' },
 ];
+
+const icons: Record<string, React.ReactNode> = {
+  stringEncryption: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>
+  ),
+  controlFlow: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+  ),
+  variableRenaming: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+    </svg>
+  ),
+  deadCode: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  antiDebug: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+    </svg>
+  ),
+  selfModifying: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+  ),
+};
 
 export function ObfuscatorPanel() {
   const [code, setCode] = useState('');
@@ -138,7 +165,7 @@ export function ObfuscatorPanel() {
             </div>
             
             <div className="space-y-3">
-              {optionsData.map((opt, i) => (
+              {optionsConfig.map((opt, i) => (
                 <label 
                   key={opt.key}
                   className="flex items-start gap-4 p-4 glass rounded-xl cursor-pointer transition-all duration-300 hover:bg-[rgb(var(--accent-primary))/5] hover:border-[rgb(var(--accent-primary))/20] group animate-slide-up"
@@ -147,14 +174,14 @@ export function ObfuscatorPanel() {
                   <div className="relative flex-shrink-0">
                     <input
                       type="checkbox"
-                      checked={options[opt.key as keyof typeof options]}
+                      checked={options[opt.key]}
                       onChange={(e) => 
                         setOptions(prev => ({ ...prev, [opt.key]: e.target.checked }))}
                       className="peer sr-only"
                     />
                     <div className="w-10 h-10 rounded-xl glass flex items-center justify-center peer-checked:bg-gradient-to-br peer-checked:from-[rgb(var(--accent-primary))] peer-checked:to-[rgb(var(--accent-secondary))] peer-checked:border-[rgb(var(--accent-primary))/40] transition-all duration-300 border border-[rgb(var(--border-subtle))/50]">
                       <span className="peer-checked:hidden text-[rgb(var(--fg-secondary))]">
-                        <OptionIcon iconPath={opt.iconPath} />
+                        {icons[opt.key]}
                       </span>
                       <svg className="w-5 h-5 text-[rgb(var(--bg-deep))] hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
