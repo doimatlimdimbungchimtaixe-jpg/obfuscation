@@ -2,21 +2,27 @@ import { ObfuscatorPanel } from '@/components/ObfuscatorPanel';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { BackgroundEffects } from '@/components/BackgroundEffects';
+import { Hero } from '@/components/Hero';
+import { Features } from '@/components/Features';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20 pb-12">
+      <main className="relative">
         <BackgroundEffects />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <Hero />
+        
+        <Features />
+        
+        <div className="section-container relative z-10">
           <ObfuscatorPanel />
         </div>
+        
+        <Footer />
       </main>
-      
-      <Footer />
     </div>
   );
 }
