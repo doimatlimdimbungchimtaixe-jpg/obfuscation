@@ -1,0 +1,34 @@
+/** Tailwind globals configuration */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 10 10 15;
+    --foreground: 255 255 255;
+    --primary: 0 255 136;
+    --primary-dim: 0 200 100;
+    --secondary: 138 43 226;
+    --accent: 255 0 110;
+    --card: 18 18 28;
+    --border: 30 30 45;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[rgb(var(--background))] text-[rgb(var(--foreground))] font-sans antialiased;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
