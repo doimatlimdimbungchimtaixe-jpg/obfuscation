@@ -2,6 +2,21 @@
 
 import { useState, useEffect, useRef } from 'react';
 
+const OptionIcon = ({ iconPath }: { iconPath: string }) => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPath} />
+  </svg>
+);
+
+const optionsData = [
+  { key: 'stringEncryption', label: 'String Encryption', desc: 'AES-256-CBC encryption for all string literals', iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
+  { key: 'controlFlow', label: 'Control Flow', desc: 'Split code into blocks with jump table dispatcher', iconPath: 'M13 10V3L4 14h7v7l9-11h-7z' },
+  { key: 'variableRenaming', label: 'Variable Renaming', desc: 'Obfuscate local variable names to meaningless identifiers', iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' },
+  { key: 'deadCode', label: 'Dead Code Injection', desc: 'Insert harmless dead code to confuse deobfuscators', iconPath: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { key: 'antiDebug', label: 'Anti-Debug', desc: 'Add runtime anti-debug and anti-tamper checks', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
+  { key: 'selfModifying', label: 'Self-Modifying', desc: 'Inject self-modifying code patterns', iconPath: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
+];
+
 export function ObfuscatorPanel() {
   const [code, setCode] = useState('');
   const [obfuscated, setObfuscated] = useState<string | null>(null);
@@ -107,21 +122,6 @@ export function ObfuscatorPanel() {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
-  const OptionIcon = ({ iconPath }: { iconPath: string }) => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPath} />
-    </svg>
-  );
-
-  const optionsList = [
-    { key: 'stringEncryption', label: 'String Encryption', desc: 'AES-256-CBC encryption for all string literals', iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
-    { key: 'controlFlow', label: 'Control Flow', desc: 'Split code into blocks with jump table dispatcher', iconPath: 'M13 10V3L4 14h7v7l9-11h-7z' },
-    { key: 'variableRenaming', label: 'Variable Renaming', desc: 'Obfuscate local variable names to meaningless identifiers', iconPath: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' },
-    { key: 'deadCode', label: 'Dead Code Injection', desc: 'Insert harmless dead code to confuse deobfuscators', iconPath: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { key: 'antiDebug', label: 'Anti-Debug', desc: 'Add runtime anti-debug and anti-tamper checks', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' },
-    { key: 'selfModifying', label: 'Self-Modifying', desc: 'Inject self-modifying code patterns', iconPath: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
-  ];
-
   return (
     <section id="obfuscator" className="relative py-16 md:py-24">
       <div className="grid lg:grid-cols-[380px_1fr] gap-8">
@@ -138,7 +138,7 @@ export function ObfuscatorPanel() {
             </div>
             
             <div className="space-y-3">
-              {optionsList.map((opt, i) => (
+              {optionsData.map((opt, i) => (
                 <label 
                   key={opt.key}
                   className="flex items-start gap-4 p-4 glass rounded-xl cursor-pointer transition-all duration-300 hover:bg-[rgb(var(--accent-primary))/5] hover:border-[rgb(var(--accent-primary))/20] group animate-slide-up"
@@ -209,7 +209,7 @@ export function ObfuscatorPanel() {
                   ) : (
                     <>
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477 4.5 1.253" />
                       </svg>
                       <span>Obfuscate Code</span>
                     </>
